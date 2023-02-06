@@ -1,16 +1,13 @@
 FROM golang:latest
 
-RUN apt-get update && apt-get install -y 
-WORKDIR /main
+COPY . ./main
 
-COPY main/go.mod ./
-COPY main/go.sum ./
-COPY main/go.sum ./
-RUN go mod download
+WORKDIR ./main
 
-COPY . ./
-COPY . ./
-WORKDIR main/
-RUN go mod tidy
-RUN go build -o valcalc main.go 
-ENTRYPOINT ./valcalc
+RUN go build -o parser main.go
+
+ENV FILE_PATH="input.txt"
+
+COPY $FILE_PATH ./main
+
+ENTRYPOINT ./parser
